@@ -1,0 +1,55 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Thanks — Demo Finance</title>
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <header class="brandbar">
+    <div class="brandbar-inner">
+      <div class="brand-logo"><span style="font-weight:900;color:var(--surface)">Qualifi Tax Solutions</span></div>
+      <div class="brand-actions">
+
+      </div>
+    </div>
+  </header>
+
+  <main class="hero-min">
+    <h1 class="hero-title" id="headline">Thank you!</h1>
+    <p class="hero-sub" id="sub">We’ve received your info and will be in touch shortly.</p>
+    <section class="card" style="max-width:720px;margin:0 auto;background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:14px">
+      <div id="summary" class="section-sub" style="text-align:left">Loading your details…</div>
+    </section>
+  </main>
+
+  <script>
+    const nameParam = new URLSearchParams(location.search).get('name');
+    let lead = null;
+    try{ lead = JSON.parse(localStorage.getItem('demo_lead')||'null'); }catch(e){}
+    const headline = document.getElementById('headline');
+    const sub = document.getElementById('sub');
+    const summary = document.getElementById('summary');
+    if(nameParam){ headline.textContent = `Thanks, ${nameParam}!`; sub.textContent = 'One of our tax specialists will reach out to you within 24hrs to schedule your free consultation.'; }
+    if(lead){
+      const items = [
+        ['Amount Owed', lead.amount || '—'],
+        ['Tax Type', lead.taxtype || '—'],
+        ['Back Taxes', lead.years || '—'],
+        ['State', lead.state || '—'],
+        ['Name', lead.name || '—'],
+        ['Email', lead.email || '—'],
+        ['Phone', lead.phone || '—'],
+        ['Contact Window', lead.contact || '—'],
+        ['Consent', lead.terms ? 'Yes' : '—'],
+        ['Submitted', lead.ts ? new Date(lead.ts).toLocaleString() : '—']
+      ];
+      summary.innerHTML = '<ul style="margin:0;padding-left:18px">' + items.map(([k,v]) => `<li><strong>${k}:</strong> ${v}</li>`).join('') + '</ul>';
+    } else {
+      summary.textContent = 'No details available (demo mode).';
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Demo Funnel — Assessment</title>
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <header class="brandbar">
+    <div class="brandbar-inner">
+      <div class="brand-logo"><img src="assets/FiveStarTax_Logo_Transparent-white.png" alt="Five Star Tax" class="logo-img"></div>
+      <div class="brand-actions">
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
+  
+  <div class="shell">
+    <div class="appbar">
+      <div class="appbar-inner">
+        <div class="app-meta"><span id="stepLabel">Step 1 of 5</span></div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="content" id="content">
+        <div class="content-inner">
+          <div class="h1" id="qTitle">Let’s begin</div>
+          <div class="section-sub" id="qSub">This takes about a minute. Your information is confidential.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="dock" id="dock">
+    <div class="dock-inner">
+      <div id="controls"></div>
+      <div style="display:flex;gap:8px">
+        <button class="btn ghost" type="button" id="backBtn">Back</button>
+        <button class="btn primary" type="button" id="nextBtn">Next</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Disclosures bottom sheet -->
+  <div class="sheet-overlay" id="sheetOverlay"></div>
+  <div class="sheet" id="sheet">
+    <div class="sheet-header">
+      <div class="sheet-title">Important Disclosures</div>
+      <button class="btn ghost" id="closeSheet" type="button">Close</button>
+    </div>
+    <div class="sheet-body">
+      <p><strong>This is a fake disclosure, sorry.</strong> This is not an offer to provide tax, legal, or financial advice. We are not affiliated with the U.S. Department of the Treasury or the Internal Revenue Service (IRS). Programs described may not be available in all states and are subject to qualification.</p>
+      <p>Qualifi</p>
+      <p><a href="#" class="link">Privacy</a> • <a href="#" class="link">Terms</a> • <a href="#" class="link">Do Not Sell or Share</a> • <a href="#" class="link">Contact</a></p>
+    </div>
+    <div class="sheet-actions">
+      <button class="btn primary" id="ackSheet" type="button">I Understand</button>
+    </div>
+  </div>
+
+  <script src="assets/wizard.js"></script>
+  <script>
+    // Dock height + iOS keyboard handling + bottom sheet
+    (function(){
+      const root = document.documentElement;
+      const dock = document.getElementById('dock');
+      function setDockHeight(){
+        const h = dock.offsetHeight || 100;
+        root.style.setProperty('--dock-h', h + 'px');
+      }
+      setDockHeight();
+      window.addEventListener('resize', setDockHeight);
+      new ResizeObserver(setDockHeight).observe(dock);
+      if (window.visualViewport){
+        visualViewport.addEventListener('resize', () => {
+          const bottomInset = Math.max(0, (window.innerHeight - visualViewport.height - visualViewport.offsetTop));
+          dock.style.transform = bottomInset ? 'translateY(-'+ bottomInset +'px)' : 'translateY(0)';
+        });
+      }
+      const overlay = document.getElementById('sheetOverlay');
+      const sheet = document.getElementById('sheet');
+      function openSheet(){ overlay.style.opacity='1'; overlay.style.pointerEvents='auto'; sheet.classList.add('open'); }
+      function closeSheet(){ overlay.style.opacity='0'; overlay.style.pointerEvents='none'; sheet.classList.remove('open'); }
+      document.getElementById('openSheet').addEventListener('click', e=>{ e.preventDefault(); openSheet(); });
+      document.getElementById('closeSheet').addEventListener('click', closeSheet);
+      document.getElementById('ackSheet').addEventListener('click', closeSheet);
+      overlay.addEventListener('click', closeSheet);
+    })();
+  </script>
+</body>
+</html>
